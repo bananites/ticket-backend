@@ -5,10 +5,9 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from './user/user.module';
 import { UserController } from './user/user.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import typeorm from './config/typeorm.config'
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user/entities/user.entity';
-import { getConnectionOptions } from 'typeorm';
-
+import { DataSource } from 'typeorm';
 
 
 @Module({
@@ -18,22 +17,19 @@ import { getConnectionOptions } from 'typeorm';
 
     UserModule,
 
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'mysecretpassword',
-      database: 'TicketSystem',
-      entities: [],
-      synchronize: true,
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.dev.env'}),
+      load: [typeorm]}),
+  
+  TypeOrmModule.forRootAsync({
+    inject:[ConfigService],
+    useFactory: async (configService: ConfigService)=>(configService.get('typeorm')),
 
-  ],
+  })],
   controllers: [AppController, UserController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+
+  constructor(private datasource: DataSource){}
+}
