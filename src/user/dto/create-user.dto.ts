@@ -1,10 +1,14 @@
+import { Status } from "../enums"
 
 
 export class CreateUserDto {
 
-    readonly username: string
-    readonly email: string
-    readonly password: string
+    username: string
+    email: string
+    password: string
+    createdAt: string
+    updatedAt: string
+    status: Status
 
 
 

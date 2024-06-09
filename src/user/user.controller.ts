@@ -1,6 +1,9 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';                                                 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UserService } from './user.service';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Put } from '@nestjs/common';
+import { CreateUserDto, UpdateUserDto } from './dto/index';
+import { User } from './entities/user.entity';
+import { Status } from './enums';
+import { GLOBAL_MODULE_METADATA } from '@nestjs/common/constants';
+import { throws } from 'assert';
 
 
 /**
@@ -16,33 +19,78 @@ import { UserService } from './user.service';
  * Antwort senden
  */
 
-@Controller()
+@Controller('users')
 export class UserController {
 
-  userService: UserService;
 
-  constructor() {}
-
+  private users: User[] = [
+    {
+      id: 1,
+      username: 'Learn tRPC',
+      password: "password",
+      status: Status.PENDING,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 2,
+      username: 'Learn Nest.js',
+      password: 'password',
+      status: Status.IN_PROGRESS,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
 
   @Get()
-  getUsers(): any {
-    return this.userService.findAll();
+  findAll() {
+    return this.users;
   }
 
-  // @Post()
-  // createUser(@Body() newUser: CreateUserDto): string{
-  //   if(!newUser.username || !newUser.email){
-  //       throw new HttpException('Username and email are required fields', HttpStatus.BAD_REQUEST);
+  @Get(':id')
+  findOne(@Param('id') id) {
+    const user = this.users.find((user) => user.id === parseInt(id));
 
-  //   }
-  //   this.users.push(newUser);
-  //   return "User created successfully";
-  // }
+    return user;
 
-  // @Put(':id')
-  // updateUser(@Param('id') id: number, @Body() updatedUser: any): string{
-  //   this.users[id]= updatedUser;
-  //   return`User with ID ${id} updated successfully`
-  // }
+  }
+
+  @Post()
+  create(@Body() input: CreateUserDto) {
+    const user = {
+      ...input,
+      createdAt: new Date(input.createdAt),
+      updatedAt: new Date(input.updatedAt),
+      id: this.users.length + 1,
+    };
+
+    this.users.push(user);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id, @Body() input: UpdateUserDto) {
+    const index = this.users.findIndex((user) => user.id === parseInt(id));
+
+    this.users[index] = {
+      ...this.users[index],
+      ...input,
+      createdAt: input.createdAt
+        ? new Date(input.createdAt)
+        : this.users[index].createdAt,
+      updatedAt: input.updatedAt
+        ? new Date(input.updatedAt)
+        : this.users[index].updatedAt,
+
+    };
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  remove(@Param('id') id) {
+    
+    this.users= this.users.filter((user) => user.id !== parseInt(id));
+
+  }
 
 }
+

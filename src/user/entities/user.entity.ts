@@ -1,21 +1,16 @@
 import {Column, Entity } from "typeorm";
 import { BaseEntity } from "src/model/base.entity";
-
-@Entity()
-export class User extends BaseEntity{
-
-
-    @Column()
-    username: string
-
-    @Column()
-    email: string
-
-    @Column()
-    password: string
+import { StreamPriorityOptions } from "http2";
+import { Status } from "../enums";
 
 
-    // @OneToMany(type => Tickets, tickets => tickets.user)
-    // tickets: Tickets[];
+export class User{
+
+id: number;
+username: string;
+password: string;
+status: Status;
+createdAt: Date;
+updatedAt: Date;
 
 }
