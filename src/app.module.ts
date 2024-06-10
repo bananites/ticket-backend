@@ -8,28 +8,33 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeorm from './config/typeorm.config'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { User } from './user/entities/user.entity';
 
 
 @Module({
   imports: [
     PassportModule.register({
-      defaultStrategy: 'jwt'}), 
+      defaultStrategy: 'jwt'
+    }),
 
     UserModule,
 
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [typeorm]}),
-  
-  TypeOrmModule.forRootAsync({
-    inject:[ConfigService],
-    useFactory: async (configService: ConfigService)=>(configService.get('typeorm')),
+      load: [typeorm]
+    }),
 
-  })],
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => (configService.get('typeorm')),
+
+    }),
+    TypeOrmModule.forFeature([User]),
+  ],
   controllers: [AppController, UserController],
   providers: [AppService],
 })
 export class AppModule {
 
-  constructor(private datasource: DataSource){}
+  constructor(private datasource: DataSource) { }
 }

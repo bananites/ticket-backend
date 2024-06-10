@@ -1,65 +1,65 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+// import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-require('dotenv').config();
+// require('dotenv').config();
 
-class ConfigService {
+// class ConfigService {
 
-  constructor(private env: { [k: string]: string | undefined }) { }
+//   constructor(private env: { [k: string]: string | undefined }) { }
 
-  private getValue(key: string, throwOnMissing = true): string {
-    const value = this.env[key];
-    if (!value && throwOnMissing) {
-      throw new Error(`config error - missing env.${key}`);
-    }
+//   private getValue(key: string, throwOnMissing = true): string {
+//     const value = this.env[key];
+//     if (!value && throwOnMissing) {
+//       throw new Error(`config error - missing env.${key}`);
+//     }
 
-    return value;
-  }
+//     return value;
+//   }
 
-  public ensureValues(keys: string[]) {
-    keys.forEach(k => this.getValue(k, true));
-    return this;
-  }
+//   public ensureValues(keys: string[]) {
+//     keys.forEach(k => this.getValue(k, true));
+//     return this;
+//   }
 
-  public getPort() {
-    return this.getValue('PORT', true);
-  }
+//   public getPort() {
+//     return this.getValue('PORT', true);
+//   }
 
-  public isProduction() {
-    const mode = this.getValue('MODE', false);
-    return mode != 'DEV';
-  }
+//   public isProduction() {
+//     const mode = this.getValue('MODE', false);
+//     return mode != 'DEV';
+//   }
 
-  public getTypeOrmConfig(): TypeOrmModuleOptions {
-    return {
-      type: 'postgres',
+//   public getTypeOrmConfig(): TypeOrmModuleOptions {
+//     return {
+//       type: 'postgres',
 
-      host: this.getValue('POSTGRES_HOST'),
-      port: parseInt(this.getValue('POSTGRES_PORT')),
-      username: this.getValue('POSTGRES_USER'),
-      password: this.getValue('POSTGRES_PASSWORD'),
-      database: this.getValue('POSTGRES_DATABASE'),
+//       host: this.getValue('POSTGRES_HOST'),
+//       port: parseInt(this.getValue('POSTGRES_PORT')),
+//       username: this.getValue('POSTGRES_USER'),
+//       password: this.getValue('POSTGRES_PASSWORD'),
+//       database: this.getValue('POSTGRES_DATABASE'),
 
-      entities: ['**/*.entity{.ts,.js}'],
+//       entities: ['**/*.entity{.ts,.js}'],
 
-      migrationsTableName: 'migration',
+//       migrationsTableName: 'migration',
 
-      migrations: ['src/migration/*.ts'],
+//       migrations: ['src/migration/*.ts'],
 
    
 
-      ssl: this.isProduction(),
-    };
-  }
+//       ssl: this.isProduction(),
+//     };
+//   }
 
-}
+// }
 
-const configService = new ConfigService(process.env)
-  .ensureValues([
-    'POSTGRES_HOST',
-    'POSTGRES_PORT',
-    'POSTGRES_USER',
-    'POSTGRES_PASSWORD',
-    'POSTGRES_DATABASE'
-  ]);
+// const configService = new ConfigService(process.env)
+//   .ensureValues([
+//     'POSTGRES_HOST',
+//     'POSTGRES_PORT',
+//     'POSTGRES_USER',
+//     'POSTGRES_PASSWORD',
+//     'POSTGRES_DATABASE'
+//   ]);
 
-export { configService };
+// export { configService };

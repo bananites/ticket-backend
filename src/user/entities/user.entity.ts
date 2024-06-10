@@ -1,16 +1,30 @@
-import {Column, Entity } from "typeorm";
-import { BaseEntity } from "src/model/base.entity";
-import { StreamPriorityOptions } from "http2";
+
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Status } from "../enums";
 
+@Entity()
+export class User {
 
-export class User{
+    @PrimaryGeneratedColumn('uuid')
+    id: number;
 
-id: number;
-username: string;
-password: string;
-status: Status;
-createdAt: Date;
-updatedAt: Date;
+    @Column()
+    username: string;
+
+    @Column()
+    password: string;
+
+    @Column({
+        type: 'enum',
+        enum: Status,
+        default: Status.IN_PROGRESS
+    })
+    status: Status;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 
 }

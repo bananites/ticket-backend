@@ -1,10 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode,  NotFoundException, Param, Patch, Post, } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto/index';
 import { User } from './entities/user.entity';
-import { Status } from './enums';
-import { GLOBAL_MODULE_METADATA } from '@nestjs/common/constants';
-import { throws } from 'assert';
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 /**
  * Controller sind Klassen die dafür verantwortlich ist, HTTP-Anfragen zu empfangen und entsprechende Antworten zu senden.
@@ -22,75 +20,84 @@ import { throws } from 'assert';
 @Controller('users')
 export class UserController {
 
+  constructor(
+    @InjectRepository(User) private readonly repository: Repository<User>,) { }
 
-  private users: User[] = [
-    {
-      id: 1,
-      username: 'Learn tRPC',
-      password: "password",
-      status: Status.PENDING,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 2,
-      username: 'Learn Nest.js',
-      password: 'password',
-      status: Status.IN_PROGRESS,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ];
 
+
+  // GET /api/v1/users
   @Get()
-  findAll() {
-    return this.users;
+  async findAll() {
+    const user = await this.repository.find();
+
+    return { success: true, count: user.length, data: user };
   }
 
+
+  // GET /api/v1/goals/:id
   @Get(':id')
-  findOne(@Param('id') id) {
-    const user = this.users.find((user) => user.id === parseInt(id));
+  async findOne(@Param('id') id) {
+    const user = await this.repository.findOneBy({ id });
 
-    return user;
+    if (!user) {
+      throw new NotFoundException();
 
+    }
+    return { success: true, data: user };
   }
 
+
+  // POST /api/v1/user
   @Post()
-  create(@Body() input: CreateUserDto) {
+  async create(@Body() input: CreateUserDto) {
     const user = {
       ...input,
       createdAt: new Date(input.createdAt),
       updatedAt: new Date(input.updatedAt),
-      id: this.users.length + 1,
     };
 
-    this.users.push(user);
+    return { success: true, data: user };
   }
 
+
+  // PATCH /apu/v1/goals/:id
   @Patch(':id')
-  update(@Param('id') id, @Body() input: UpdateUserDto) {
-    const index = this.users.findIndex((user) => user.id === parseInt(id));
+  async update(@Param('id') id, @Body() input: UpdateUserDto) {
+    const user = await this.repository.findOneBy({ id });
 
-    this.users[index] = {
-      ...this.users[index],
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const data = await this.repository.save({
+      ...user,
       ...input,
-      createdAt: input.createdAt
-        ? new Date(input.createdAt)
-        : this.users[index].createdAt,
-      updatedAt: input.updatedAt
-        ? new Date(input.updatedAt)
-        : this.users[index].updatedAt,
+      createdAt: input.createdAt ?? user.createdAt,
+      updatedAt: input.updatedAt ?? user.updatedAt
 
-    };
+    });
+
+    return {success: true, data};
+
+  };
+
+
+
+// DELETE /api/v1/users/:id
+@Delete(':id')
+@HttpCode(204)
+async remove(@Param('id') id) {
+
+  const user = await this.repository.findOneBy({ id });
+
+  if(!user){
+    throw new NotFoundException();
+
   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  remove(@Param('id') id) {
-    
-    this.users= this.users.filter((user) => user.id !== parseInt(id));
+  await this.repository.remove(user); 
 
-  }
+}
 
 }
 
