@@ -9,14 +9,11 @@ import typeorm from './config/typeorm.config'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { User } from './user/entities/user.entity';
+import { TicketModule } from './ticket/ticket.module';
 
 
 @Module({
   imports: [
-    PassportModule.register({
-      defaultStrategy: 'jwt'
-    }),
-
     UserModule,
 
     ConfigModule.forRoot({
@@ -30,6 +27,7 @@ import { User } from './user/entities/user.entity';
 
     }),
     TypeOrmModule.forFeature([User]),
+    TicketModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService],

@@ -1,36 +1,28 @@
-
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Status } from "../enums";
+import { TicketStatus } from "../enums/ticket-status.enum";
 
 @Entity()
-export class User {
+export class Ticket {
 
     @PrimaryGeneratedColumn('uuid')
     id: number;
 
     @Column()
-    firstname: string;
-
-    @Column()
-    lastname: string;
-
-    @Column()
-    email: string;
-
-    @Column()
-    password: string;
+    createdBy: string;
 
     @Column({
         type: 'enum',
-        enum: Status,
-        default: Status.ACTIVE
+        enum: TicketStatus,
+        default: TicketStatus.NEW_OPEN
     })
-    status: Status;
+    status: TicketStatus;
 
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
+    
+
 
 }
