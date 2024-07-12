@@ -1,14 +1,11 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { TicketStatus } from "../enums/ticket-status.enum";
+import { BaseEntity } from "src/model/base.entity";
 
 @Entity()
-export class Ticket {
+export class Ticket extends BaseEntity{
 
-    @PrimaryGeneratedColumn('uuid')
-    id: number;
-
-    @Column()
-    createdBy: string;
+    
 
     @Column({
         type: 'enum',
@@ -17,11 +14,6 @@ export class Ticket {
     })
     status: TicketStatus;
 
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
     
 
 
