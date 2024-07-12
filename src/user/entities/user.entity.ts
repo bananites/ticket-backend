@@ -1,12 +1,11 @@
 
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity} from "typeorm";
 import { Status } from "../enums";
+import { BaseEntity } from "src/model/base.entity";
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
 
-    @PrimaryGeneratedColumn('uuid')
-    id: number;
 
     @Column()
     firstname: string;
@@ -26,11 +25,5 @@ export class User {
         default: Status.ACTIVE
     })
     status: Status;
-
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
 
 }
