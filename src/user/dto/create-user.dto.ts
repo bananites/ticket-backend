@@ -6,10 +6,8 @@ export class CreateUserDto {
     username: string
     email: string
     password: string
-    createdAt: string
-    updatedAt: string
     status: Status
-
-
+    createDateTime: Date
+    lastChangedDateTime: Date
 
 }

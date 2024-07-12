@@ -52,8 +52,8 @@ export class UserController {
   async create(@Body() input: CreateUserDto) {
     const user = {
       ...input,
-      createdAt: new Date(input.createdAt),
-      updatedAt: new Date(input.updatedAt),
+      createDateTime: new Date(input.createDateTime),
+      lastChangedDateTime: new Date(input.lastChangedDateTime),
     };
 
     return { success: true, data: user };
@@ -72,8 +72,8 @@ export class UserController {
     const data = await this.repository.save({
       ...user,
       ...input,
-      createdAt: input.createdAt ?? user.createdAt,
-      updatedAt: input.updatedAt ?? user.updatedAt
+      createDateTime: input.createDateTime ?? user.createDateTime,
+      lastChangedDateTime: input.lastChangedDateTime ?? user.lastChangedDateTime
 
     });
 
