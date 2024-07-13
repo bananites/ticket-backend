@@ -3,6 +3,7 @@ import { CreateUserDto, UpdateUserDto } from './dto/index';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserService } from './user.service';
 
 /**
  * Controller sind Klassen die dafür verantwortlich ist, HTTP-Anfragen zu empfangen und entsprechende Antworten zu senden.
@@ -21,83 +22,92 @@ import { Repository } from 'typeorm';
 export class UserController {
 
   constructor(
-    @InjectRepository(User) private readonly repository: Repository<User>,) { }
+    // @InjectRepository(User) private readonly repository: Repository<User>,
+    private readonly userService: UserService) { }
 
 
 
-  // GET /api/v1/users
-  @Get()
-  async findAll() {
-    const user = await this.repository.find();
+  // // GET /api/v1/users
+  // @Get()
+  // async findAll() {
+  //   const user = await this.repository.find();
 
-    return { success: true, count: user.length, data: user };
-  }
+  //   return { success: true, count: user.length, data: user };
+  // }
 
 
-  // GET /api/v1/goals/:id
-  @Get(':id')
-  async findOne(@Param('id') id) {
-    const user = await this.repository.findOneBy({ id });
+  // GET /api/v1/users/:id
+  // @Get(':id')
+  // async findOne(@Param('id') id) {
+  //   const user = await this.repository.findOneBy({ id });
 
-    if (!user) {
-      throw new NotFoundException();
+  //   if (!user) {
+  //     throw new NotFoundException();
 
-    }
-    return { success: true, data: user };
-  }
+  //   }
+  //   return { success: true, data: user };
+  // }
 
 
   // POST /api/v1/user
   @Post()
-  async create(@Body() input: CreateUserDto) {
-    const user = {
-      ...input,
-      createDateTime: new Date(input.createDateTime),
-      lastChangedDateTime: new Date(input.lastChangedDateTime),
-    };
+  async create(@Body() createUserDto: CreateUserDto) {
+   try{
+    await this.userService.create(
+      createUserDto
+    );
 
-    return { success: true, data: user };
+    return{
+      success: true,
+      message: 'User created successfully'
+    };
+   } catch(error){
+    return {
+      success: false,
+      message: error.message,
+    };
+   }
   }
 
 
-  // PATCH /apu/v1/goals/:id
-  @Patch(':id')
-  async update(@Param('id') id, @Body() input: UpdateUserDto) {
-    const user = await this.repository.findOneBy({ id });
+  // // PATCH /apu/v1/goals/:id
+  // @Patch(':id')
+  // async update(@Param('id') id, @Body() input: UpdateUserDto) {
+  //   const user = await this.repository.findOneBy({ id });
 
-    if (!user) {
-      throw new NotFoundException();
-    }
+  //   if (!user) {
+  //     throw new NotFoundException();
+  //   }
 
-    const data = await this.repository.save({
-      ...user,
-      ...input,
-      createDateTime: input.createDateTime ?? user.createDateTime,
-      lastChangedDateTime: input.lastChangedDateTime ?? user.lastChangedDateTime
+  //   const data = await this.repository.save({
+  //     ...user,
+  //     ...input,
+  //     createDateTime: input.createDateTime ?? user.createDateTime,
+  //     lastChangedDateTime: input.lastChangedDateTime ?? user.lastChangedDateTime
 
-    });
+  //   });
 
-    return {success: true, data};
+  //   return {success: true, data};
 
-  };
+  // };
 
 
 
 // DELETE /api/v1/users/:id
-@Delete(':id')
-@HttpCode(204)
-async remove(@Param('id') id) {
+// @Delete(':id')
+// @HttpCode(204)
+// async remove(@Param('id') id) {
 
-  const user = await this.repository.findOneBy({ id });
+//   const user = await this.repository.findOneBy({ id });
 
-  if(!user){
-    throw new NotFoundException();
+//   if(!user){
+//     throw new NotFoundException();
 
-  }
+//   }
 
-  await this.repository.remove(user); 
+//   await this.repository.remove(user); 
 
-}
+// }
 
 }
 
