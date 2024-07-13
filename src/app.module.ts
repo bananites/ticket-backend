@@ -10,6 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { User } from './user/entities/user.entity';
 import { TicketModule } from './ticket/ticket.module';
+import { UserService } from './user/user.service';
 
 
 @Module({
@@ -30,7 +31,7 @@ import { TicketModule } from './ticket/ticket.module';
     TicketModule,
   ],
   controllers: [AppController, UserController],
-  providers: [AppService],
+  providers: [AppService, UserService],
 })
 export class AppModule {
 
