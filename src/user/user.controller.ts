@@ -37,16 +37,11 @@ export class UserController {
 
 
   // GET /api/v1/users/:id
-  // @Get(':id')
-  // async findOne(@Param('id') id) {
-  //   const user = await this.repository.findOneBy({ id });
+  @Get(':id')
+  async findOne(@Param('id') id): Promise<User>{
 
-  //   if (!user) {
-  //     throw new NotFoundException();
-
-  //   }
-  //   return { success: true, data: user };
-  // }
+    return this.userService.findOne(id);
+  }
 
 
   // POST /api/v1/user
