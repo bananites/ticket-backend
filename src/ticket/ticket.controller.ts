@@ -1,10 +1,6 @@
 import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Ticket } from './entities/ticket.entity';
-import { Repository } from 'typeorm';
-import { NotFoundError } from 'rxjs';
 import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UserService } from 'src/user/user.service';
 import { TicketService } from './ticket.service';
 
 @Controller('ticket')
@@ -15,13 +11,13 @@ export class TicketController {
         private readonly ticketService: TicketService
     ) { }
 
-    // GET /api/v1/tickets
-    // @Get()
-    // async findAll() {
-    //     const ticket = await this.repository.find();
+    // GET /api/v1/ticket
 
-    //     return { success: true, count: ticket.length, data: ticket };
-    // }
+    @Get()
+    async findAll(): Promise<Ticket[]>{
+
+        return this.ticketService.findAll();
+    }
 
     // GET /api/v1/tickets/:id
     // @Get(':id')
