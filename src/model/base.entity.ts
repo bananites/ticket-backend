@@ -1,5 +1,5 @@
-import internal from "stream";
-import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+
+import {CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 export abstract class BaseEntity{
 
