@@ -5,6 +5,12 @@ import { ApiProperty } from "@nestjs/swagger";
 export class CreateTicketDto {
 
     @ApiProperty({
+        example:"title",
+        required: true
+    })
+    title: string
+
+    @ApiProperty({
         example: "description",
         required: true
     })
@@ -13,7 +19,6 @@ export class CreateTicketDto {
     status: TicketStatus
 
     @ApiProperty({
-        default:"8fa408ef-0ce1-4f41-9674-47aa3246404a",
         description: "User ID, default",
         example: "8fa408ef-0ce1-4f41-9674-47aa3246404a",
         required: false
