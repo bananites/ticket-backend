@@ -16,7 +16,7 @@ export class TicketController {
     @Get()
     async findAll(): Promise<Ticket[]>{
 
-        return this.ticketService.findAll();
+        return await this.ticketService.findAll();
     }
 
     // GET /api/v1/tickets/:id
