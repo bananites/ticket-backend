@@ -7,7 +7,10 @@ import { User } from "src/user/entities/user.entity";
 export class Ticket extends BaseEntity{
     
 
-    @Column()
+    @Column({type: 'varchar', length: 300})
+    title: string;
+
+    @Column({type: 'varchar', length: 300})
     description: string;
     
     @Column({
@@ -20,11 +23,10 @@ export class Ticket extends BaseEntity{
     @Column({type: 'varchar', length: 300})
     createdBy: string;
     
-    // @ManyToOne(type => User, owner => owner )
-    @ManyToOne(() => User, (user) => user.id, {nullable: true})
+    @ManyToOne(() => User, (user) => user.id, {nullable: true, eager: true})
     owner: User['id']
 
-    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    @UpdateDateColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP'})
     lastChangedDateTime: Date;
 
     @Column({type: 'varchar', length: 300})
