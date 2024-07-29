@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Ticket } from './entities/ticket.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TicketService {
@@ -18,6 +17,7 @@ export class TicketService {
     async findAll(): Promise<Ticket[]> {
 
         return this.ticketRepository.find();
+     
     }
 
     async create(
