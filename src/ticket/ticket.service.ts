@@ -9,8 +9,7 @@ export class TicketService {
 
     constructor(
         @InjectRepository(Ticket)
-        private ticketRepository: Repository<Ticket>,
-        private datasource: DataSource
+        private ticketRepository: Repository<Ticket>
     ) { }
 
 
