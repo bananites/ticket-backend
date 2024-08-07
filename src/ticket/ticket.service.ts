@@ -19,6 +19,11 @@ export class TicketService {
      
     }
 
+    async findOneBy(id): Promise<Ticket>{
+
+        return this.ticketRepository.findOneBy(id);
+    }
+
     async create(
         createTicketDto: CreateTicketDto,
     ): Promise<Ticket> {

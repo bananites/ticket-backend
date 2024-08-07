@@ -20,15 +20,15 @@ export class TicketController {
     }
 
     // GET /api/v1/tickets/:id
-    // @Get(':id')
-    // async findOne(@Param('id') id) {
-    //     const ticket = await this.repository.findOneBy({ id });
-    //     if (!ticket) {
-    //         throw new NotFoundException();
+    @Get(':id')
+    async findOne(@Param('id') id: string): Promise<Ticket> {
+        const ticket = await this.ticketService.findOneBy({ id });
+        if (!ticket) {
+            throw new NotFoundException();
 
-    //     }
-    //     return { success: true, data: ticket };
-    // }
+        }
+        return ticket;
+    }
 
     // POST /api/v1/ticket
     @Post()
