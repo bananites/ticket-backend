@@ -34,13 +34,16 @@ export class TicketController {
     @Post()
     async create(@Body() createTicketDto: CreateTicketDto){
         try{
-            await this.ticketService.create(
+           const ticket = await this.ticketService.create(
                 createTicketDto
             );
 
             return{
+                ticketId: ticket.id,
                 success: true,
                 message: 'Ticket created successfully'
+                
+
             };
         } catch(error){
             return{
