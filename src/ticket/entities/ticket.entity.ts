@@ -26,9 +26,6 @@ export class Ticket extends BaseEntity{
     @ManyToOne(() => User, (user) => user.id, {nullable: true, eager: true})
     owner: User['id']
 
-    @UpdateDateColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP'})
-    lastChangedDateTime: Date;
-
     @Column({type: 'varchar', length: 300})
     lastChangedBy: string;
 
