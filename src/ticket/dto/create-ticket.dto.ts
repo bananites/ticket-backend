@@ -25,16 +25,10 @@ export class CreateTicketDto {
     })
     owner: User['id']
 
-    @ApiProperty({
-        default: "TIMESTAMP",
-        required: true
-    })
+  
     createDateTime: Date
 
-    @ApiProperty({
-        default: "TIMESTAMP",
-        required: false
-    })
+
     lastChangedDateTime: Date
     
     @ApiProperty({
