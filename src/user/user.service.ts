@@ -36,21 +36,5 @@ export class UserService {
             );
             return this.usersRepository.save(userData);
     }
-    async createMany(users: User[]) {
-        const queryRunner = this.datasource.createQueryRunner();
 
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-
-        try {
-            await queryRunner.manager.save(users[0]);
-            await queryRunner.manager.save(users[1]);
-
-            await queryRunner.commitTransaction();
-        } catch (err) {
-            await queryRunner.rollbackTransaction();
-        } finally{
-            await queryRunner.release();
-        }
-    }
 }
