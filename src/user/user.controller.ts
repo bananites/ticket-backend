@@ -28,12 +28,11 @@ export class UserController {
 
 
   // // GET /api/v1/users
-  // @Get()
-  // async findAll() {
-  //   const user = await this.repository.find();
+  @Get()
+  async findAll(): Promise<User[]> {
 
-  //   return { success: true, count: user.length, data: user };
-  // }
+    return await this.userService.findAll();
+  }
 
 
   // GET /api/v1/users/:id
