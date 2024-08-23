@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     ) {
         super({
             //TODO pass env var
-            secretOrKey: 'topSecret92',
+            secretOrKey: process.env.SECRET_OR_KEY,
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         });
     }

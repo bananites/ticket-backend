@@ -13,7 +13,7 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule.register({defaultStrategy: 'jwt'}),
     JwtModule.register({
       //TODO add env var
-      secret: 'topSecret92',   // SECRET KEY - TEXT OR FILE
+      secret: process.env.SECRET,   // SECRET KEY - TEXT OR FILE
       signOptions: {
         expiresIn: 3600        // TOKEN EXPIRY TIME
       }
