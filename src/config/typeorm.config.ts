@@ -1,11 +1,10 @@
 import { registerAs } from '@nestjs/config';
 import { config as dotenvConfig} from 'dotenv'
-import { Ticket } from 'src/ticket/entities/ticket.entity';
 import { User } from 'src/user/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 
-dotenvConfig({ path: '.dev.env'});
+dotenvConfig({ path: process.env.NODE_ENV !== 'production' ? '.env.dev' : '.env'});
 
 
 const configProd = {
