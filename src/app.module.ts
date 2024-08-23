@@ -11,6 +11,7 @@ import { DataSource } from 'typeorm';
 import { User } from './user/entities/user.entity';
 import { TicketModule } from './ticket/ticket.module';
 import { UserService } from './user/user.service';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -29,6 +30,7 @@ import { UserService } from './user/user.service';
     }),
     TypeOrmModule.forFeature([User]),
     TicketModule,
+    AuthModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
