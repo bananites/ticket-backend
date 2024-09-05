@@ -9,6 +9,8 @@ import { JwtStrategy } from './jwt.strategy';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
 import { jwtConstants } from './jwtConstants';
+import { AuthGuard } from './auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -16,7 +18,6 @@ import { jwtConstants } from './jwtConstants';
     // REGISTERING PASSPORT AND JWT
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      //TODO add env var
       secret: jwtConstants.secret, // SECRET KEY - TEXT OR FILE
       signOptions: {
         expiresIn: '60s', // TOKEN EXPIRY TIME
@@ -24,7 +25,15 @@ import { jwtConstants } from './jwtConstants';
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [AuthService, JwtStrategy, UserService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    AuthService,
+    JwtStrategy,
+    UserService,
+  ],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule],
 })
