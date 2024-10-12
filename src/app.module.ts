@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     UserModule,
+    TicketModule,
 
     ConfigModule.forRoot({
       isGlobal: true,
@@ -26,7 +27,6 @@ import { AuthModule } from './auth/auth.module';
         configService.get('typeorm'),
     }),
     TypeOrmModule.forFeature([User]),
-    TicketModule,
     AuthModule,
   ],
   controllers: [AppController, UserController],

@@ -18,6 +18,7 @@ import { APP_GUARD } from '@nestjs/core';
     // REGISTERING PASSPORT AND JWT
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
+      global: true,
       secret: jwtConstants.secret, // SECRET KEY - TEXT OR FILE
       signOptions: {
         expiresIn: '60s', // TOKEN EXPIRY TIME
