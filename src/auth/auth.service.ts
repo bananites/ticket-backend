@@ -11,7 +11,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(
     authcredentialsDto: AuthCredentialsDto,
@@ -22,7 +22,10 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       // PREVIOUSLY HERE ONLY successful message
       // JWT TOKEN FOR SECURE
-      const payload: JwtPayload = { email };
+
+      const userFirstname: string = user.firstname
+      const userLastname: string = user.lastname
+      const payload: JwtPayload = { userFirstname, userLastname, email };
       const accessToken = await this.jwtService.signAsync(payload);
       return { accessToken };
     } else {
