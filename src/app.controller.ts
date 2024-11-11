@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller } from '@nestjs/common';
 
 /**
  * Controller sind Klassen die dafür verantwortlich ist, HTTP-Anfragen zu empfangen und entsprechende Antworten zu senden.
@@ -16,5 +15,5 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor() {}
+  constructor() { }
 }
