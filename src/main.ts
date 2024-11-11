@@ -10,7 +10,7 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('TicketSystem')
     .setVersion('1.0')
-    .addServer('http://localhost:3000', 'Local environment')
+    .addServer('http://192.168.178.81:3000', 'Local environment')
     .addServer('http://production.com', 'Production')
     .addTag('TicketAPI')
     .addBearerAuth({
