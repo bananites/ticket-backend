@@ -1,8 +1,8 @@
 
-import { BeforeInsert, Column, Entity} from "typeorm";
+import { BeforeInsert, Column, Entity } from "typeorm";
 import { Status } from "../enums";
 import { BaseEntity } from "src/model/base.entity";
-import  * as bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 
 @Entity()
 export class User extends BaseEntity {
@@ -14,7 +14,7 @@ export class User extends BaseEntity {
     @Column()
     lastname: string;
 
-    @Column({ unique : true})
+    @Column({ unique: true })
     email: string;
 
     @Column()
@@ -26,6 +26,9 @@ export class User extends BaseEntity {
         default: Status.ACTIVE
     })
     status: Status;
+
+    @Column()
+    refreshToken: string;
 
     @BeforeInsert()
     async hashPassword() {

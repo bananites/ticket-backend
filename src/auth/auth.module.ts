@@ -8,9 +8,9 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
-import { jwtConstants } from './jwtConstants';
 import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { RefreshTokenStrategy } from './jwtRefresh.strategy';
 
 @Module({
   imports: [
@@ -19,10 +19,6 @@ import { APP_GUARD } from '@nestjs/core';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       global: true,
-      secret: jwtConstants.secret, // SECRET KEY - TEXT OR FILE
-      signOptions: {
-        expiresIn: '60s', // TOKEN EXPIRY TIME
-      },
     }),
     TypeOrmModule.forFeature([User]),
   ],
@@ -33,9 +29,10 @@ import { APP_GUARD } from '@nestjs/core';
     },
     AuthService,
     JwtStrategy,
+    RefreshTokenStrategy,
     UserService,
   ],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule],
 })
-export class AuthModule {}
+export class AuthModule { }
