@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateUserDto } from './dto/index';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { CreateUserDto, UpdateUserDto } from './dto/index';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 /**
  * Controller sind Klassen die dafür verantwortlich ist, HTTP-Anfragen zu empfangen und entsprechende Antworten zu senden.
@@ -15,10 +16,10 @@ import { UserService } from './user.service';
  * Anfragen verarbeiten
  * Antwort senden
  */
-
+@ApiBearerAuth()
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   // // GET /api/v1/users
   @Get()
@@ -50,26 +51,12 @@ export class UserController {
     }
   }
 
-  // // PATCH /apu/v1/goals/:id
-  // @Patch(':id')
-  // async update(@Param('id') id, @Body() input: UpdateUserDto) {
-  //   const user = await this.repository.findOneBy({ id });
-
-  //   if (!user) {
-  //     throw new NotFoundException();
-  //   }
-
-  //   const data = await this.repository.save({
-  //     ...user,
-  //     ...input,
-  //     createDateTime: input.createDateTime ?? user.createDateTime,
-  //     lastChangedDateTime: input.lastChangedDateTime ?? user.lastChangedDateTime
-
-  //   });
-
-  //   return {success: true, data};
-
-  // };
+  // PUT /api/v1/users/:id
+  @Put(':id')
+  async updateUser(@Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto): Promise<User> {
+    return this.userService.update(id, updateUserDto);
+  }
 
   // DELETE /api/v1/users/:id
   // @Delete(':id')
