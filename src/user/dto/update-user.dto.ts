@@ -1,6 +1,21 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateUserDto } from "./create-user.dto";
+import { ApiProperty } from "@nestjs/swagger";
+import { Status } from "../enums";
 
-export class UpdateUserDto extends PartialType(CreateUserDto){
-    
+export class UpdateUserDto {
+    readonly firstname?: string;
+
+    readonly lastname?: string;
+
+    readonly email?: string;
+
+    readonly password?: string;
+
+    readonly refreshToken?: string;
+
+    readonly status?: Status;
+
+    readonly createDateTime?: Date;
+
+    readonly lastChangedDateTime?: Date;
+
 }
