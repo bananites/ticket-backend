@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt'; // JWT
 import { User } from 'src/user/entities/user.entity';
@@ -16,27 +16,16 @@ export class AuthService {
 
   async signIn(
     authcredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ accessToken: string, refreshToken: string }> {
     const { email, password } = authcredentialsDto;
     const user: User = await this.userService.findOneByEmail(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // JWT TOKEN FOR SECURE
 
-      const userFirstname: string = user.firstname
-      const userLastname: string = user.lastname
-      const payload: JwtPayload = { userFirstname, userLastname, email };
-
-      //TODO old accesstoken
-      // const accessToken = await this.jwtService.signAsync({ payload }, {
-      //   secret: jwtConstants.secret,
-      //   expiresIn: '10m'
-      // });
-      // return { accessToken };
-
 
       // TODO TOKENS access and refresh token
-      const tokens = await this.getTokens(payload);
+      const tokens = await this.getTokens(user.email);
       await this.updateRefreshToken(email, tokens.refreshToken);
       return tokens;
 
@@ -47,16 +36,18 @@ export class AuthService {
   }
 
 
-  async getTokens(payload: JwtPayload) {
+  async getTokens(email: string) {
+
+    const jwtPayload: JwtPayload = { email: email }
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync({
-        sub: payload
+        sub: jwtPayload
       }, {
         secret: jwtConstants.secret,
         expiresIn: '10m',
       }),
       this.jwtService.signAsync({
-        sub: payload
+        sub: jwtPayload
       }, {
         secret: jwtConstants.secretRefresh,
         expiresIn: '7d'
@@ -66,10 +57,26 @@ export class AuthService {
   }
 
 
+
   async updateRefreshToken(email: string, refreshToken: string) {
     const salt = await bcrypt.genSalt();
     const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 
-    await this.userService.update(email, { refreshToken: hashedRefreshToken});
+    await this.userService.update(email, { refreshToken: hashedRefreshToken });
+  }
+
+  async refreshTokens(email: string, refreshToken: string) {
+    const user = await this.userService.findOneByEmail(email);
+    if (!user || !user.refreshToken) {
+      throw new ForbiddenException('Access Denied');
+    }
+
+    const refreshTokenMatches = await bcrypt.compare(refreshToken, user.refreshToken);
+
+    if (!refreshTokenMatches) {
+      throw new ForbiddenException('Access Denied');
+    }
+    const tokens = await this.getTokens(user.email);
+    return tokens;
   }
 }

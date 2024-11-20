@@ -27,9 +27,13 @@ export class User extends BaseEntity {
     })
     status: Status;
 
-    @Column()
+    @Column({
+        type: 'varchar',
+        length: 64
+    })
     refreshToken: string;
 
+    
     @BeforeInsert()
     async hashPassword() {
         const salt = await bcrypt.genSalt();
