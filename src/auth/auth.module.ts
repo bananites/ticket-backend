@@ -8,9 +8,9 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
-import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { RefreshTokenStrategy } from './jwtRefresh.strategy';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
