@@ -24,7 +24,7 @@ export class AuthService {
       // JWT TOKEN FOR SECURE
 
 
-      // TODO TOKENS access and refresh token
+      // TOKENS access and refresh token
       const tokens = await this.getTokens(user.email);
       await this.updateRefreshToken(email, tokens.refreshToken);
       return tokens;
