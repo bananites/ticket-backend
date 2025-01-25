@@ -7,13 +7,12 @@ import {
   Post,
   Req,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
-import { RefreshTokenGuard } from './guards/refreshToken.guard';
+import { RefreshTokenDTO } from './dto/refreshToken.dto';
 
 @ApiBearerAuth()
 @Controller('auth')
@@ -35,12 +34,11 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  refreshTokens(@Req() req):
+  refreshTokens(@Req() refreshTokenDTO: RefreshTokenDTO):
     Promise<{ accessToken: string, refreshToken: string }> {
-    const email = req.user['sub'].email;
-    const refreshToken = req.user['refreshToken']
+    const email = refreshTokenDTO.req.user['sub'].email;
+    const refreshToken = refreshTokenDTO.req.user['refreshToken']
 
     return this.authService.refreshTokens(email, refreshToken);
 
