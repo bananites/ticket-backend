@@ -44,13 +44,13 @@ export class AuthService {
         sub: jwtPayload
       }, {
         secret: jwtConstants.secret,
-        expiresIn: '10m',
+        expiresIn: '60s',
       }),
       this.jwtService.signAsync({
         sub: jwtPayload
       }, {
         secret: jwtConstants.secretRefresh,
-        expiresIn: '7d'
+        expiresIn: '60m'
       })
     ])
     return { accessToken, refreshToken };
