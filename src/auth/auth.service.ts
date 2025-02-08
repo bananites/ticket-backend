@@ -16,7 +16,7 @@ export class AuthService {
 
   async signIn(
     authcredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string, refreshToken: string }> {
+  ): Promise<{  email: string, accessToken: string, refreshToken: string }> {
     const { email, password } = authcredentialsDto;
     const user: User = await this.userService.findOneByEmail(email);
 
@@ -25,7 +25,7 @@ export class AuthService {
 
 
       // TOKENS access and refresh token
-      const tokens = await this.getTokens(user.email);
+      const tokens = await this.getTokens(user.email) ;
       await this.updateRefreshToken(email, tokens.refreshToken);
       return tokens;
 
@@ -53,7 +53,7 @@ export class AuthService {
         expiresIn: '60m'
       })
     ])
-    return { accessToken, refreshToken };
+    return { email, accessToken, refreshToken };
   }
 
 
@@ -65,17 +65,12 @@ export class AuthService {
     await this.userService.update(email, { refreshToken: hashedRefreshToken });
   }
 
-  async refreshTokens(email: string, refreshToken: string) {
+  async refreshTokens(email: string) {
     const user = await this.userService.findOneByEmail(email);
-    if (!user || !user.refreshToken) {
+    if (!user) {
       throw new ForbiddenException('Access Denied');
     }
 
-    const refreshTokenMatches = await bcrypt.compare(refreshToken, user.refreshToken);
-
-    if (!refreshTokenMatches) {
-      throw new ForbiddenException('Access Denied');
-    }
     const tokens = await this.getTokens(user.email);
     return tokens;
   }

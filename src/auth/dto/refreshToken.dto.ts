@@ -6,6 +6,7 @@ export class RefreshTokenDTO {
   @ApiProperty({
     required: true
   })
-  req: any
+  email: string
+
 
 }
