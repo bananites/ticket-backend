@@ -37,14 +37,13 @@ export class AuthController {
 
   @Public()
   @UseGuards(RefreshGuard)
-  @Post('refresh')
-  // refreshTokens(@Req() refreshDTO: RefreshTokenDTO):
-  refreshTokens(@Body() refreshDTO: RefreshTokenDTO):
-    Promise<{email:string,  accessToken: string, refreshToken: string }> {
+  @Get('refresh')
+  refreshTokens(@Request() req):
+    Promise<{ accessToken: string, refreshToken: string }> {
 
-    const email = refreshDTO.email
+    const [type, token] = req.headers.authorization.split(" ") ?? []
 
-    return this.authService.refreshTokens(email);
+    return this.authService.refreshTokens(token);
 
   }
 }

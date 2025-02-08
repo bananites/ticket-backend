@@ -14,7 +14,6 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @Controller('ticket')
-@UseGuards()
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 

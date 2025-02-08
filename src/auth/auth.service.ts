@@ -16,7 +16,7 @@ export class AuthService {
 
   async signIn(
     authcredentialsDto: AuthCredentialsDto,
-  ): Promise<{  email: string, accessToken: string, refreshToken: string }> {
+  ): Promise<{ accessToken: string, refreshToken: string }> {
     const { email, password } = authcredentialsDto;
     const user: User = await this.userService.findOneByEmail(email);
 
@@ -53,7 +53,7 @@ export class AuthService {
         expiresIn: '60m'
       })
     ])
-    return { email, accessToken, refreshToken };
+    return { accessToken, refreshToken };
   }
 
 
@@ -65,7 +65,12 @@ export class AuthService {
     await this.userService.update(email, { refreshToken: hashedRefreshToken });
   }
 
-  async refreshTokens(email: string) {
+  async refreshTokens(token) {
+
+
+    const decodedJWT= this.jwtService.decode(token);
+    const email = decodedJWT.sub.email;
+  
     const user = await this.userService.findOneByEmail(email);
     if (!user) {
       throw new ForbiddenException('Access Denied');
