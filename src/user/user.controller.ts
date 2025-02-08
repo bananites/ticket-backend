@@ -30,7 +30,7 @@ export class UserController {
   // GET /api/v1/users/:id
   @Get(':id')
   async findOne(@Param('id') id): Promise<User> {
-    return this.userService.findOne(id);
+    return await this.userService.findOne(id);
   }
 
   // POST /api/v1/users
